@@ -37,10 +37,9 @@ export default {
         this.points += 1
       } else {
         if (event.keyCode === this.down && this.bottomBorder.includes(this.currentSquare)) {
-          
-          this.currentSquare -= 380;
+          /* this.currentSquare -= 380; */
         } else if (event.keyCode === this.down) {
-          this.currentSquare = this.currentSquare.map(e => e + 1)
+          this.currentSquare = this.currentSquare.map(e => e + 10)
         } else if (event.keyCode === this.up && this.topBorder.includes(this.currentSquare)) {
           this.currentSquare += 380;
         } else if (event.keyCode === this.up && this.currentSquare > 20) {
