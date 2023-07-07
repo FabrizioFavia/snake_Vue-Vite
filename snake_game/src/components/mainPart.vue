@@ -6,8 +6,6 @@ export default {
   },
   data() {
     return {
-
-      greetings: 'ciao',
       snake: [1, 2, 3],
       up: 38,
       down: 40,
@@ -17,6 +15,8 @@ export default {
       rightBorder: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
       topBorder: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       bottomBorder: [91, 92, 93, 94, 95, 96, 97, 98, 99, 100],
+      movements: [],
+      toCheck: false,
       apple: /* Math.floor(Math.random(1) * 100) */7,
       points: 0,
 
@@ -38,35 +38,65 @@ export default {
         this.moveSnake(current, (i - 1));
       }
     },
+    checkIfArrayIsUnique(array) {
+      let head = array[array.length-1]
+      for (let i = array.length-2; i >= 0; i--) {
+        const element = array[i];
+
+        if (element = head) {
+          this.toCheck = true
+          return true
+        } 
+      }
+        return this.toCheck;
+    },
 
     move(event, index) {
+
+      let freeMove = false;
+
       if (this.snake.includes(this.apple)) {
-        this.snake.unshift((this.apple) - this.snake.length)
+        this.snake.unshift('x')
         this.apple = Math.floor(Math.random() * 100);
         this.points += 1
       } else {
         const position = this.snake[this.snake.length - 1];
-        if (event.keyCode === this.down && this.bottomBorder.includes(this.snake[this.snake.length-1])) {
+        if (event.keyCode === this.down && this.bottomBorder.includes(this.snake[this.snake.length - 1])) {
           this.snake[this.snake.length - 1] -= 90;
-        } else if (event.keyCode === this.up && this.topBorder.includes(this.snake[this.snake.length-1])) {
-          this.snake[this.snake.length-1]+=90;
-        }   else if (event.keyCode === this.right && this.rightBorder.includes(this.snake[this.snake.length-1])) {
-          this.snake[this.snake.length-1]-=9;
-        }else if (event.keyCode === this.left && this.leftBorder.includes(this.snake[this.snake.length-1])) {
-          this.snake[this.snake.length-1]+=9;
-          
-        } else if (event.keyCode === this.right) {
+        } else if (event.keyCode === this.up && this.topBorder.includes(this.snake[this.snake.length - 1])) {
+          this.snake[this.snake.length - 1] += 90;
+        } else if (event.keyCode === this.right && this.rightBorder.includes(this.snake[this.snake.length - 1])) {
+          this.snake[this.snake.length - 1] -= 9;
+        } else if (event.keyCode === this.left && this.leftBorder.includes(this.snake[this.snake.length - 1])) {
+          this.snake[this.snake.length - 1] += 9;
+
+        } else if (event.keyCode === this.right && this.movements[this.movements.length - 1] !== 'l') {
+          freeMove = true
+          this.movements.push('r');
+          console.log(this.movements);
           this.snake[this.snake.length - 1] += 1;
-        }else if (event.keyCode === this.left) {
+
+        } else if (event.keyCode === this.left && this.movements[this.movements.length - 1] !== 'r') {
+          freeMove = true
+          this.movements.push('l');
+          console.log(this.movements);
           this.snake[this.snake.length - 1] -= 1;
-        }else if (event.keyCode === this.up) {
+        } else if (event.keyCode === this.up && this.movements[this.movements.length - 1] !== 'd') {
+          freeMove = true
+          this.movements.push('u');
           this.snake[this.snake.length - 1] -= 10;
-        }else if (event.keyCode === this.down) {
+        } else if (event.keyCode === this.down && this.movements[this.movements.length - 1] !== 'u') {
+          freeMove = true
+          this.movements.push('d');
           this.snake[this.snake.length - 1] += 10;
         }
-        this.moveSnake(position, (this.snake.length - 1));
-      } 
-      console.log(this.snake);
+        if (freeMove==true) {
+          this.moveSnake(position, (this.snake.length - 1));
+        }
+        /* if (this.toCheck == true) {
+          alert('hai perso');
+        } */
+      }
       return this.snake;
     }
   }
